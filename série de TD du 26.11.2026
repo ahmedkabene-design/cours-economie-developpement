@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices d'application par Axes</title>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2b6cb0;
+            --bg-color: #f7fafc;
+            --text-color: #2d3748;
+            --accent-color: #ed8936;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body, html {
+            height: 100%;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            scroll-behavior: smooth;
+        }
+
+        .slide-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+        }
+
+        .slide {
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem 8%;
+            position: relative;
+            border-bottom: 1px solid #e2e8f0;
+            overflow-y: auto; /* Permet de scroller si le contenu est trop long sur petit écran */
+        }
+
+        h1 { font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem; text-align: center; }
+        h2 { font-size: 1.8rem; color: var(--primary-color); margin-bottom: 1rem; border-bottom: 3px solid var(--accent-color); padding-bottom: 0.5rem; display: inline-block; }
+        
+        .axe-tag {
+            font-size: 0.9rem;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        h4 { font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--primary-color); }
+        p, li { font-size: 1.05rem; line-height: 1.5; margin-bottom: 0.8rem; }
+
+        .question-box {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .options-list { list-style-type: none; margin-top: 1rem; }
+        .options-list li { margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; }
+        .options-list li::before { content: "•"; color: var(--secondary-color); font-size: 1.5rem; position: absolute; left: 0; top: -5px; }
+
+        /* Style des corrections cliquables */
+        details.correction-box {
+            background-color: #ebf8ff;
+            border: 1px dashed #4299e1;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-top: -0.5rem;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+        }
+        details.correction-box summary {
+            font-weight: bold;
+            color: var(--secondary-color);
+            list-style: none;
+        }
+        details.correction-box summary::-webkit-details-marker { display: none; }
+        details.correction-box summary::before { content: "▶ Voir la correction"; }
+        details.correction-box[open] summary::before { content: "▼ Masquer la correction"; }
+
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+        }
+        .title-slide h1 { color: white; font-size: 3.5rem; }
+        .title-slide p { font-size: 1.5rem; opacity: 0.9; margin-bottom: 2rem; }
+
+        /* Sommaire */
+        .toc { display: flex; flex-direction: column; gap: 10px; max-width: 600px; margin: 0 auto; }
+        .toc a {
+            color: white;
+            text-decoration: none;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background 0.3s;
+            font-size: 1.1rem;
+        }
+        .toc a:hover { background: rgba(255,255,255,0.25); }
+
+        .scroll-hint { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); animation: bounce 2s infinite; font-size: 1.5rem; color: #cbd5e0; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); } 40% { transform: translateY(-20px) translateX(-50%); } 60% { transform: translateY(-10px) translateX(-50%); } }
+
+        @media (max-width: 768px) {
+            .slide { padding: 2rem 5%; height: auto; min-height: 100vh; justify-content: flex-start; padding-top: 4rem;}
+            .title-slide h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="slide-container">
+
+    <!-- Slide de Titre -->
+    <section class="slide title-slide">
+        <h1>Exercices d'application</h1>
+        <p>Analyse des mécanismes économiques</p>
+        
+        <!-- Sommaire cliquable -->
+        <nav class="toc">
+            <a href="#axe1">1. Concepts fondateurs</a>
+            <a href="#axe2">2. Population & Ressources</a>
+            <a href="#axe3">3. Équilibre Macroéconomique</a>
+            <a href="#axe4">4. Consommation & Épargne</a>
+            <a href="#axe5">5. Investissement & Politiques</a>
+            <a href="#axe6">6. Croissance Endogène</a>
+            <a href="#axe7">7. Destruction Créatrice</a>
+        </nav>
+    </section>
+
+    <!-- Axe 1 : Développement Durable - Concepts fondateurs -->
+    <section class="slide" id="axe1">
+        <div>
+            <span class="axe-tag">Axe : Concepts fondateurs</span>
+            <h2>Définition et Piliers</h2>
+            
+            <div class="question-box">
+                <h4>Exercice 1 : Le concept de "Besoins" et de "Limitations"</h4>
+                <p>Complétez le raisonnement suivant :</p>
+                <p>Le développement durable répond aux besoins du présent sans compromettre ceux des générations futures. Deux concepts sont inhérents à cette notion : le concept de <strong>________</strong> (et particulièrement les besoins essentiels des plus démunis) et l'idée des <strong>________</strong> que l'état des techniques et de l'organisation sociale impose à l'environnement.</p>
+            </div>
+
+            <div class="question-box">
+                <h4>Exercice 2 : Les 5 P (Piliers)</h4>
+                <p>Associez chaque pilier à sa définition exacte :</p>
+                <ul class="options-list">
+                    <li><strong>Humanité</strong> : Éliminer la pauvreté et la faim, et permettre à tous de réaliser leur potentiel dans la dignité.</li>
+                    <li><strong>Planète</strong> : Favoriser des sociétés pacifiques, justes et inclusives, libérées de la peur et de la violence.</li>
+                    <li><strong>Prospérité</strong> : Lutter contre la dégradation de la planète via des modes de consommation durables.</li>
+                    <li><strong>Paix</strong> : Faire en sorte que tous aient une vie prospère en harmonie avec la nature.</li>
+                </ul>
+                <p><em>Question : Quelles sont les deux associations erronées ? Corrigez-les.</em></p>
+            </div>
+            
+            <details class="correction-box">
+                <summary></summary>
+                <p><strong>Correction :</strong> Il y a en réalité <strong>deux paires d'erreurs</strong> (les définitions sont mélangées) :</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Planète</strong> correspond à la définition de "Paix" (lutte contre la dégradation).</li>
+                    <li><strong>Paix</strong> correspond à la définition de "Planète" (sociétés pacifiques).</li>
+                    <li><strong>Prospérité</strong> correspond à la définition de "Humanité" (vie prospère en harmonie avec la nature).</li>
+                    <li><strong>Humanité</strong> correspond à la définition de "Prospérité" (éliminer la pauvreté).</li>
+                </ul>
+            </details>
+        </div>
+    </section>
+
+    <!-- Axe 2 : Développement Durable - Population et Ressources -->
+    <section class="slide" id="axe2">
+        <div>
+            <span class="axe-tag">Axe : Population, Agriculture et Industrie</span>
+            <h2>Les tensions sur les ressources</h2>
+            
+            <div class="question-box">
+                <h4>Exercice 3 : Analyse d'affirmation</h4>
+                <p>« Une personne supplémentaire dans un pays industriel consomme bien plus et exerce sur les ressources naturelles une pression bien plus forte qu'une personne supplémentaire dans le Tiers Monde. »</p>
+                <p><strong>Question :</strong> Quelle problématique majeure cette phrase soulève-t-elle concernant la progression démographique mondiale et la sécurité alimentaire ?</p>
+            </div>
+
+            <div class="question-box">
+                <h4>Exercice 4 : Le paradoxe de l'industrie et de l'agriculture</h4>
+                <p>Le monde produit aujourd'hui davantage de nourriture par habitant qu'il n'en a jamais produit, pourtant des millions de personnes ne mangent pas à leur faim. Par ailleurs, l'industrie a "le pouvoir d'améliorer ou de détériorer l'environnement".</p>
+                <ul class="options-list">
+                    <li>A) L'agriculture manque de ressources naturelles pour produire plus.</li>
+                    <li>B) Le problème de la faim est un problème d'accès (politiques, pauvreté) et non de production globale.</li>
+                    <li>C) L'industrie n'apporte que des détériorations environnementales.</li>
+                </ul>
+                <p><em>Choisissez la bonne réponse et justifiez.</em></p>
+            </div>
+            
+            <details class="correction-box">
+                <summary></summary>
+                <p><strong>Correction Ex 4 :</strong> Réponse <strong>B</strong>. La production globale suffit, mais les inégalités d'accès (revenus, guerres, manque d'infrastructures) empêchent une bonne répartition.</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- Axe 3 : Macroéconomie - Demande effective et Loi des débouchés -->
+    <section class="slide" id="axe3">
+        <div>
+            <span class="axe-tag">Axe : Équilibre Macroéconomique</span>
+            <h2>Rejet de la Loi des Débouchés</h2>
+            
+            <div class="question-box">
+                <h4>Exercice 5 : Offre et Demande</h4>
+                <p>La théorie classique suppose implicitement que "le système économique travaille constamment à pleine capacité", de sorte que l'offre crée sa propre demande.</p>
+                <p><strong>Question de synthèse :</strong> Expliquez pourquoi, selon l'analyse de la demande effective, une insuffisance de la demande peut arrêter l'augmentation de l'emploi avant d'avoir atteint son maximum, et ce, même si la productivité marginale du travail est encore supérieure à sa désutilité.</p>
+            </div>
+
+            <div class="question-box">
+                <h4>Exercice 6 : Les rigidités</h4>
+                <p>Quelles sont les deux raisons principales pour lesquelles le fonctionnement spontané des économies de marché débouche presque inévitablement sur le chômage ?</p>
+                <ul class="options-list">
+                    <li>A) Les rigidités nominales (salaires et prix) et les défauts de coordination (anticipations).</li>
+                    <li>B) L'excès d'intervention de l'État et la surconsommation.</li>
+                    <li>C) La loi psychologique fondamentale et le multiplicateur.</li>
+                </ul>
+            </div>
+            <details class="correction-box">
+                <summary></summary>
+                <p><strong>Correction Ex 6 :</strong> Réponse <strong>A</strong>. Keynes pointe du doigt le fait que les salaires ne s'ajustent pas immédiatement à la baisse (rigidité) et que les entrepreneurs se basent sur des anticipations (incertitude).</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- Axe 4 : Macroéconomie - Propension à consommer et Épargne -->
+    <section class="slide" id="axe4">
+        <div>
+            <span class="axe-tag">Axe : Comportements et Épargne</span>
+            <h2>Loi psychologique et Paradoxe</h2>
+            
+            <div class="question-box">
+                <h4>Exercice 7 : La loi psychologique fondamentale</h4>
+                <p>« Les hommes tendent à accroître leur consommation à mesure que leur revenu croît, mais non d'une quantité aussi grande que l'accroissement du revenu. »</p>
+                <p><strong>Application :</strong> Si le revenu d'un ménage augmente de 1 000 €, et que sa propension marginale à consommer est de 0,8. Quelle somme sera consommée ? Quelle somme sera épargnée ?</p>
+            </div>
+
+            <div class="question-box">
+                <h4>Exercice 8 : Le paradoxe de l'épargne</h4>
+                <p>Une hausse du taux d'intérêt peut amener la communauté à tirer plus d'épargne d'un revenu donné. Cependant, on peut être sûr qu'elle <strong>diminuera</strong> le montant total de l'épargne réellement constituée.</p>
+                <p><strong>Question :</strong> Comment expliquer ce paradoxe ? (Indice : que se passe-t-il au niveau de la production et des revenus si tout le monde épargne plus au lieu de consommer ?)</p>
+            </div>
+            <details class="correction-box">
+                <summary></summary>
+                <p><strong>Correction Ex 7 :</strong> Somme consommée = 800 € (1000 x 0,8). Somme épargnée = 200 € (1000 x 0,2).</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- Axe 5 : Macroéconomie - Investissement et État -->
+    <section class="slide" id="axe5">
+        <div>
+            <span class="axe-tag">Axe : Investissement et Politiques Publiques</span>
+            <h2>Le Multiplicateur et l'Intervention</h2>
+            
+            <div class="question-box">
+                <h4>Exercice 9 : Mécanique du multiplicateur</h4>
+                <p>L'emploi ne peut progresser que de pair avec l'investissement. Un accroissement de l'investissement global entraîne une hausse du revenu égal à <em>k</em> fois l'accroissement de l'investissement.</p>
+                <p>Si l'État injecte 50 milliards dans des travaux publics et que la propension à consommer est de 0,75 :</p>
+                <ul class="options-list">
+                    <li>1. Calculez le multiplicateur (k).</li>
+                    <li>2. Calculez le revenu total généré.</li>
+                    <li>3. Pourquoi les travaux publics ont-ils un effet beaucoup plus considérable lorsqu'il existe un chômage sévère ?</li>
+                </ul>
+            </div>
+
+            <div class="question-box">
+                <h4>Exercice 10 : Dépenses sur fonds d'emprunt</h4>
+                <p>Pour relancer l'économie, l'État peut employer des "dépenses sur fonds d'emprunt". Quelles sont les deux catégories de ces dépenses et quel est leur effet respectif ?</p>
+                <ul class="options-list">
+                    <li>A) L'investissement public (accroît l'investissement) et les dépenses courantes (accroissent la propension à consommer).</li>
+                    <li>B) Les impôts et les subventions.</li>
+                    <li>C) L'épargne des ménages et le déficit commercial.</li>
+                </ul>
+            </div>
+            <details class="correction-box">
+                <summary></summary>
+                <p><strong>Correction Ex 9 :</strong> 1. k = 1 / (1 - 0,75) = 4. <br> 2. Revenu total = 50 x 4 = 200 milliards. <br> 3. Car il y a des ressources (chômeurs, machines) inutilisées, donc l'injection ne crée pas d'inflation mais de la production réelle.</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- Axe 6 : Croissance Endogène - Connaissance et Rendements -->
+    <section class="slide" id="axe6">
+        <div>
+            <span class="axe-tag">Axe : Théorie de la Croissance</span>
+            <h2>La Connaissance et les Rendements</h2>
+            
+            <div class="question-box">
+                <h4>Exercice 11 : Rupture avec les rendements décroissants</h4>
+                <p>Dans les modèles standards, le capital physique a une productivité marginale décroissante. Qu'advient-il si l'on considère la <strong>connaissance</strong> comme un input de production ?</p>
+                <ul class="options-list">
+                    <li>A) La connaissance a une productivité marginale croissante ; elle peut croître sans borne.</li>
+                    <li>B) La production par tête ne peut jamais croître sans limite.</li>
+                    <li>C) Les pays pauvres vont automatiquement converger vers les pays riches.</li>
+                </ul>
+            </div>
+
+            <div class="question-box">
+                <h4>Exercice 12 : Les trois ingrédients de la croissance</h4>
+                <p>Le modèle repose sur trois éléments. Associez-les correctement :</p>
+                <p><strong>1. Externalités</strong> | <strong>2. Rendements croissants de l'output</strong> | <strong>3. Rendements décroissants des nouvelles connaissances</strong></p>
+                <ul class="options-list">
+                    <li>A) La connaissance ne peut être parfaitement brevetée ; elle a un effet externe positif sur les autres entreprises.</li>
+                    <li>B) Garantissent que la consommation et l'utilité ne croissent pas trop vite (doubler la recherche ne double pas la production de nouvelles idées).</li>
+                    <li>C) La production de biens de consommation, fonction du stock de connaissance, est globalement convexe (non concave).</li>
+                </ul>
+                <p><em>Quel est l'ingrédient "décisif" pour renverser les résultats standards sur la croissance ?</em></p>
+            </div>
+            <details class="correction-box">
+                <summary></summary>
+                <p><strong>Corrections :</strong> Ex 11 : Réponse A. <br> Ex 12 : 1-A, 2-C, 3-B. L'ingrédient décisif est 2-C (les rendements croissants de l'output liés à la connaissance).</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- Axe 7 : Croissance Endogène - Destruction créatrice -->
+    <section class="slide" id="axe7">
+        <div>
+            <span class="axe-tag">Axe : Innovation et Discontinuité</span>
+            <h2>Gains, Pertes et Obsolescence</h2>
+            
+            <div class="question-box">
+                <h4>Exercice 13 : Les deux ruptures fondamentales</h4>
+                <p>Le modèle de croissance stochastique fondé sur l'idée de "destruction créatrice" s'écarte des modèles existants sur deux points. Lesquels ?</p>
+                <ul class="options-list">
+                    <li>A) Le progrès technique crée des pertes (obsolescence des anciennes compétences, biens, marchés et procédés) autant que des gains. Le processus de croissance est discontinu.</li>
+                    <li>B) Le capital physique est le seul moteur de la croissance. Le marché est toujours en équilibre.</li>
+                    <li>C) L'État doit tout planifier. L'incertitude des innovations s'annule entre les industries.</li>
+                </ul>
+            </div>
+
+            <div class="question-box">
+                <h4>Exercice 14 : Analyse des effets de l'obsolescence</h4>
+                <p>« La perspective d'un niveau élevé de recherche dans le futur peut décourager la recherche aujourd'hui en menaçant les fruits de cette recherche d'une obsolescence rapide. »</p>
+                <p><strong>Question :</strong> En termes normatifs, l'obsolescence crée une externalité négative des innovations. Quelle est la conséquence sur le niveau de croissance généré par le laissez-faire ?</p>
+            </div>
+            <details class="correction-box">
+                <summary></summary>
+                <p><strong>Correction Ex 13 :</strong> Réponse A.</p>
+                <p><strong>Correction Ex 14 :</strong> L'externalité négative signifie que les innovateurs ne prennent pas en compte la destruction de la valeur des innovations passées. Cela peut mener à un niveau de croissance sous-optimal ou instable si les entreprises anticipent trop d'obsolescence et arrêtent d'investir.</p>
+            </details>
+        </div>
+    </section>
+
+</div>
+
+</body>
+</html>
